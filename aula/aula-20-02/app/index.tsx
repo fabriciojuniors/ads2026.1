@@ -1,11 +1,19 @@
 import { useState } from "react";
-import { Button, Text, TextInput, View } from "react-native";
+import { Alert, Button, StyleSheet, Text, TextInput, View } from "react-native";
 
 export default function Index() {
   const [nome, setNome] = useState("");
 
   const hello = () => {
-    console.log('Clicou no botão');    
+    console.log('Clicou no botão');
+    Alert.alert("Atenção",
+      "Este é um alerta",
+      [
+        {
+          text: "Concordo",
+          onPress: () => console.log("Concordou")
+        }
+      ])
   }
 
   return (
@@ -17,20 +25,31 @@ export default function Index() {
       }}
     >
       <Text>OLAA, Mundo!</Text>
-      <Button 
+      <Button
         title="Botão"
         color={"green"}
         onPress={hello}
       />
-      
-      <TextInput 
+
+      <TextInput
         placeholder="Senha"
         editable={true}
         keyboardType="email-address"
         secureTextEntry
         value={nome}
         onChangeText={setNome}
+        style={[estilo.input]}
       />
     </View>
   );
 }
+
+const estilo = StyleSheet.create({
+  input: {
+    borderWidth: 2,
+    width: 200
+  },
+  teste: {
+
+  }
+})
