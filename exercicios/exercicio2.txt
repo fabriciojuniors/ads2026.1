@@ -1,0 +1,5 @@
+
+Crie um aplicativo React Native que deverá possui os seguintes comportamentos:
+
+1) Um componente Pressable que, quando pressionado deverá apresentar um Alert informando a ação, mas caso pressionado por 2s deverá abrir uma modal.
+2) O conteúdo da modal deve possuir uma imagem e um botão para fechar a modal
