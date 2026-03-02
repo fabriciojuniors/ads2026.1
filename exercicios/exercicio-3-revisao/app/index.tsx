@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { FlatList, Image, Modal, Pressable, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, FlatList, Image, Modal, Pressable, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface Desenvolvedor {
@@ -110,7 +110,7 @@ export default function Index() {
         animationType="slide"
         transparent
         onRequestClose={() => setDesenvolvedorSelecionado(null)}
-        >
+      >
         <View style={estilos.modalOverlay}>
           <View style={estilos.modalContent}>
             <Text style={estilos.modalTitle}>Detalhes do desenvolvedor</Text>
@@ -130,11 +130,21 @@ export default function Index() {
               </>
             )}
 
-            <TouchableOpacity 
-              style={estilos.modalButton}
-              onPress={() => setDesenvolvedorSelecionado(null)}>
-              <Text style={estilos.modalButtonText}>Fechar</Text>
-            </TouchableOpacity>
+            <View style={{ gap: 10, marginTop: "auto" }}>
+              <TouchableOpacity
+                style={[estilos.modalButton, { backgroundColor: 'red' }]}
+                onPress={() => {
+                  setDesenvolvedorSelecionado(null)
+                  Alert.alert("Contratação!", `Você está contratando o(a) desenvolvedor(a) ${desenvolvedorSelecionado?.nome}`)
+                }}>
+                <Text style={estilos.modalButtonText}>Contratar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={estilos.modalButton}
+                onPress={() => setDesenvolvedorSelecionado(null)}>
+                <Text style={estilos.modalButtonText}>Fechar</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
