@@ -130,7 +130,7 @@ export default function Index() {
               </>
             )}
 
-            <View style={{ gap: 10, marginTop: "auto" }}>
+            <View style={{gap: 10, marginTop: "auto"}}>
               <TouchableOpacity
                 style={[estilos.modalButton, { backgroundColor: 'red' }]}
                 onPress={() => {
