@@ -7,15 +7,17 @@ Existe uma padronização habitual entre os desenvolvedores de trabalhar com uma
 │   └───images
 │
 └───src
-    ├───app // Arquivos de rotas
-    ├───components // Componentes visuais 
-    ├───contexts // Contextos da aplicação (Ex: Autenticação)
+    ├───app // Arquivos de rotas (páginas da aplicação)
+    ├───components // Componentes visuais reutilizáveis
     ├───hooks // Objetos destinados a aplicação de regras de negócios / chamadas em API
-    ├───utils // Funções utilitárias (formatação, cálculo)
-    └───types // Tipos para o TypeScript
+    ├───schemas // Esquemas de validação (Zod)
+    ├───types // Tipos e interfaces TypeScript
+    └───utils // Funções utilitárias (formatação, cálculo)
 ```
 
 > **_Atenção_**: Este exemplo pode (e deve) ser extendido e melhor adaptado para as realidade de cada projeto.
+> 
+> **_Nota_**: Caso sua aplicação utilize Contextos (Context API), você pode adicionar uma pasta `contexts` para gerenciar estados globais, como autenticação.
 
 ---
 
@@ -27,24 +29,41 @@ npm install react-hook-form
 
 ### 1. No componente Input
 
-No componente Input, utilize o Controller do React Hook Form e passe explicitamente as propriedades value e onChangeText para o TextInput:
+No componente Input, utilize o Controller do React Hook Form. É importante extrair o `control` do contexto usando `useFormContext` e passar explicitamente as propriedades value e onChangeText para o TextInput:
 
 ```tsx
-<Controller
-  control={control}
-  name={nome}
-  rules={{ required: obrigatorio }}
-  render={({ field }) => (
-    <TextInput
-      value={field.value}
-      onChangeText={field.onChange}
-      placeholder={placeholder}
-      editable={editable}
-      keyboardType={keyboardType}
-      style={style.input}
-    />
-  )}
-/>
+interface InputProps {
+    nome: string
+    label: string
+    placeholder?: string
+    obrigatorio?: boolean
+    editable?: boolean
+    keyboardType: KeyboardTypeOptions
+}
+
+export const Input = ({ nome, label, placeholder, obrigatorio = true, editable = true, keyboardType }: InputProps) => {
+    const { control } = useFormContext()
+
+    return (
+        <View>
+            <Text>{label} {obrigatorio ? '*' : ''}</Text>
+            <Controller
+                control={control}
+                name={nome}
+                render={({ field }) => (
+                    <TextInput
+                        value={field.value}
+                        onChangeText={field.onChange}
+                        placeholder={placeholder}
+                        editable={editable}
+                        keyboardType={keyboardType}
+                        style={style.input}
+                    />
+                )}
+            />
+        </View>
+    )
+}
 ```
 
 Evite usar o spread {...field} diretamente, pois o TextInput do React Native não reconhece todas as propriedades do objeto field.
@@ -65,12 +84,16 @@ const onSubmit = (data) => {
 return (
   <FormProvider {...form}>
     <Input nome="nome" label="Nome" placeholder="Digite seu nome" keyboardType="default" />
-    <Button title="Enviar" onPress={form.handleSubmit(onSubmit)} />
+    <TouchableOpacity onPress={form.handleSubmit(onSubmit)}>
+      <Text>Enviar</Text>
+    </TouchableOpacity>
   </FormProvider>
 );
 ```
 
 Assim, o Input estará corretamente integrado ao React Hook Form e o estado do formulário será controlado automaticamente.
+
+---
 
 ### Tipagem dinâmica com ZOD
 O Zod é uma biblioteca de declaração e validação de esquemas focada em TypeScript.
@@ -133,6 +156,48 @@ export const loginSchema = z.object({
 
 export type Login = z.infer<typeof loginSchema>;
 ```
+
+### 4. Integração ZOD com React Hook Form
+Para integrar o Zod com o React Hook Form, é necessário utilizar o `zodResolver` da biblioteca `@hookform/resolvers`. Isso permite que o Zod valide os dados do formulário automaticamente:
+
+```tsx
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FormProvider, useForm } from "react-hook-form";
+import { Login, loginSchema } from "../schemas/login.schema";
+
+export default function Index() {
+  const form = useForm<Login>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: '',
+      nome: '',
+      idade: 0,
+    },
+  });
+
+  const onSubmit = (data: Login) => {
+    console.log(data); // Dados validados e tipados
+  };
+
+  return (
+    <FormProvider {...form}>
+      <Input nome="nome" label="Nome" placeholder="Digite seu nome" keyboardType="default" />
+      <Input nome="email" label="Email" placeholder="Digite seu email" keyboardType="email-address" />
+      <Input nome="idade" label="Idade" placeholder="Digite sua idade" keyboardType="numeric" />
+      <TouchableOpacity onPress={form.handleSubmit(onSubmit)}>
+        <Text>Salvar</Text>
+      </TouchableOpacity>
+    </FormProvider>
+  );
+}
+```
+
+O `zodResolver` garante que:
+- Os dados são validados de acordo com o esquema do Zod antes de chegar no `onSubmit`
+- As mensagens de erro configuradas no esquema são exibidas automaticamente nos campos
+- A tipagem TypeScript é mantida e inferida automaticamente
+
+---
 
 ### Requisições HTTP
 `Fetch:` Utiliza a abordagem padrão do JS para realização de requisições `HTTP`, não depende de bibliotecas externas e configurações adicionais, mas pode apresentar limitações (ou falta de melhores alternativas) com relação a passagem de parâmetros, em especial, `QueryParams`. 
