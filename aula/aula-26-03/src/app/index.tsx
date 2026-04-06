@@ -1,8 +1,20 @@
+import { FormProvider, useForm } from "react-hook-form";
 import { View } from "react-native";
 import { Botao } from "../components/botao";
 import { Input } from "../components/input";
+import { ProdutoSchema } from "../types/produto.type";
 
 export default function Index() {
+  const form = useForm()
+
+  const enviar = (dados: any) => {
+    try {
+      ProdutoSchema.parse(dados)
+    } catch(e) {
+      console.log(e);      
+    }
+  }
+
   return (
     <View
       style={{
@@ -11,18 +23,32 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <Botao 
-        label="Botão customizado" 
+      <Botao
+        label="Botão customizado"
         onPress={() => console.log('CLICOU')}
-       />
+      />
 
-       <Input 
-        nome="produto"
-        label="Produto"
-        keyboardType="default"
-        placeholder="Informe o nome do produto"
-        obrigatorio
-       />
+      <FormProvider {...form}>
+        <Input
+          nome="produto"
+          label="Produto"
+          keyboardType="default"
+          placeholder="Informe o nome do produto"
+          obrigatorio
+        />
+        <Input
+          nome="preco"
+          label="Preco"
+          keyboardType="default"
+          placeholder="Informe o preço do produto"
+          obrigatorio
+        />
+        <Botao
+          label="Enviar"
+          onPress={form.handleSubmit(enviar)}
+        />
+      </FormProvider>
+
     </View>
   );
 }
