@@ -1,3 +1,4 @@
+import { PostPage } from "../types/post.type";
 
 const URL_API = process.env.EXPO_PUBLIC_URL_API
 
@@ -6,8 +7,8 @@ if (!URL_API) {
 }
 
 export function useFetch() {
-    
-    const findAll = async (): Promise<any> => {
+
+    const findAll = async (): Promise<PostPage> => {
         const request = await fetch(`${URL_API}/posts`);
 
         if (!request.ok) {

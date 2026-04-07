@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { Alert, FlatList, Text, View } from "react-native";
 import { useFetch } from "../hooks/useFetch";
+import { PostPage } from "../types/post.type";
 
 export default function FetchPage() {
     const { findAll } = useFetch()
 
-    const [posts, setPosts] = useState<any>();
+    const [posts, setPosts] = useState<PostPage>();
 
     const carregarPosts = async () => {
         try {
@@ -29,7 +30,7 @@ export default function FetchPage() {
                 data={posts!.posts ?? []}
                 renderItem={({ item }) => (
                     <View>
-                        <Text>{item.title}</Text>
+                        <Text>{item.body}</Text>
                     </View>
                 )}
             />
