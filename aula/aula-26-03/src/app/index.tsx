@@ -1,3 +1,4 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from "react-hook-form";
 import { View } from "react-native";
 import { Botao } from "../components/botao";
@@ -5,7 +6,13 @@ import { Input } from "../components/input";
 import { ProdutoSchema } from "../types/produto.type";
 
 export default function Index() {
-  const form = useForm()
+  const form = useForm({
+    mode: 'onSubmit',
+    resolver: zodResolver(ProdutoSchema),
+    defaultValues: {
+      produto: 'PRODUTO PADRÃO'
+    }
+  })
 
   const enviar = (dados: any) => {
     try {

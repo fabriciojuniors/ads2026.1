@@ -28,16 +28,17 @@ export const Input = ({ nome,
             <Controller
                 name={nome}
                 control={contexto.control}
-                rules={{
-                    required: {
-                        value: true,
-                        message: "O campo é obrigatório"
-                    },
-                    minLength: {
-                        value: 3,
-                        message: "O tamanho mínimo é 3"
-                    }
-                }}
+                // Desnecessário pois utilizamos Zod
+                // rules={{
+                //     required: {
+                //         value: true,
+                //         message: "O campo é obrigatório"
+                //     },
+                //     minLength: {
+                //         value: 3,
+                //         message: "O tamanho mínimo é 3"
+                //     }
+                // }}
                 render={({ field, fieldState }) => (
                     <>
                         <TextInput
