@@ -1,4 +1,4 @@
-import { PostPage } from "../types/post.type";
+import { CadastroPost, PostPage } from "../types/post.type";
 
 const URL_API = process.env.EXPO_PUBLIC_URL_API
 
@@ -19,7 +19,18 @@ export function useFetch() {
         return resposta;
     }
 
+    const salvar = async (post: CadastroPost) => {
+        return await fetch(`${URL_API}/posts/add`, {
+            method: 'POST',
+            body: JSON.stringify(post),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+    }
+
     return {
-        findAll
+        findAll,
+        salvar
     }
 }

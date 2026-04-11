@@ -27,7 +27,7 @@ export default function FetchPage() {
             <Text>{process.env.EXPO_PUBLIC_URL_API}</Text>
 
             <FlatList
-                data={posts!.posts ?? []}
+                data={posts?.posts ?? []}
                 renderItem={({ item }) => (
                     <View>
                         <Text>{item.body}</Text>

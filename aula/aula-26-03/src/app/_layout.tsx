@@ -30,6 +30,19 @@ export default function RootLayout() {
           }
         }}
       />
+      <Tabs.Screen
+        name="cadastro"
+        options={{
+          title: 'Cadastro de post',
+          tabBarIcon: ({ color, size }) => {
+            return <MaterialIcons
+              color={color}
+              size={size}
+              name="add-comment"
+            />
+          }
+        }}
+      />
     </Tabs>
   );
 }
