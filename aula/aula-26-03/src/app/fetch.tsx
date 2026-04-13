@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Alert, FlatList, Text, View } from "react-native";
+import PostCard from "../components/post-card";
 import { useFetch } from "../hooks/useFetch";
 import { PostPage } from "../types/post.type";
 
@@ -29,9 +30,7 @@ export default function FetchPage() {
             <FlatList
                 data={posts?.posts ?? []}
                 renderItem={({ item }) => (
-                    <View>
-                        <Text>{item.body}</Text>
-                    </View>
+                    <PostCard post={item} />
                 )}
             />
         </View>
