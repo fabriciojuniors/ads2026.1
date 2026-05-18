@@ -1,4 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useAxios } from "../hooks/useAxios";
 import { Post } from "../types/post.type";
 
 interface PostCardProps {
@@ -6,6 +7,30 @@ interface PostCardProps {
 }
 
 export default function PostCard({ post }: PostCardProps) {
+    const { deletePost, update } = useAxios()
+
+    const excluir = () => {
+        try {
+            deletePost(post.id);
+            console.log('Post excluído com sucesso');
+            
+        } catch (e) {
+            console.error('Erro ao excluir Post', e);
+        }
+    }
+
+    const atualizar = () => {
+        try {
+            update(post.id, {
+                ...post,
+                title: `${post.title} - ATUALIZADO`
+            });
+            console.log('Post atualizado com sucesso');
+        } catch (e) {
+            console.error('Erro ao excluir Post', e);
+        }
+    }
+
     return (
         <View style={styles.cardContainer}>
             {/* Header */}
@@ -28,10 +53,10 @@ export default function PostCard({ post }: PostCardProps) {
             </View>
 
             <View style={styles.footer}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={atualizar}>
                     <Text style={styles.reactionText}>Editar</Text>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={excluir}>
                     <Text style={styles.reactionText}>Exluir</Text>
                 </TouchableOpacity>
             </View>

@@ -1,4 +1,4 @@
-import { PostPage } from "../types/post.type";
+import { Post, PostPage } from "../types/post.type";
 import { api } from "../utils/axios";
 
 export function useAxios() {
@@ -8,7 +8,17 @@ export function useAxios() {
         return data;
     }
 
+    const deletePost = async (id: number) => {
+        return await api.delete(`/posts/${id}`)
+    }
+
+    const update = async (id: number, post: Post) => {
+        return api.put(`/posts/${id}`, post)
+    }
+
     return {
-        findAll
+        findAll,
+        deletePost,
+        update
     }
 }
