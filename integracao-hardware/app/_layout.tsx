@@ -18,6 +18,18 @@ export default function RootLayout() {
           tabBarIcon: ({ color, size }) => <Ionicons name="camera-outline" size={size} color={color} />
         }}
       />
+
+      <Tabs.Protected guard={true}>
+        <Tabs.Screen
+          name="localizacao"
+          options={{
+            tabBarLabel: 'Localização',
+            headerTitle: 'Localização',
+            tabBarIcon: ({ color, size }) => <Ionicons name="location-outline" size={size} color={color} />
+          }}
+        />
+      </Tabs.Protected>
+
     </Tabs>
   )
 }
