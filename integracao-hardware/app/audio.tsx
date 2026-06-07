@@ -1,0 +1,76 @@
+import {
+    AudioModule,
+    RecordingPresets,
+    setAudioModeAsync,
+    useAudioPlayer,
+    useAudioRecorder,
+    useAudioRecorderState,
+} from 'expo-audio';
+import { useEffect } from 'react';
+import { Alert, Button, StyleSheet, View } from 'react-native';
+
+export default function App() {
+    const audioRecorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
+    const recorderState = useAudioRecorderState(audioRecorder);
+    const player = useAudioPlayer(audioRecorder.uri);
+
+
+    const record = async () => {
+        await audioRecorder.prepareToRecordAsync();
+        audioRecorder.record();
+    };
+
+    const stopRecording = async () => {
+        await audioRecorder.stop();
+        if (audioRecorder.uri) {
+            player.replace(audioRecorder.uri);
+        }
+    };
+
+    const verificarPermissao = async () => {
+        const status = await AudioModule.requestRecordingPermissionsAsync();
+        if (!status.granted) {
+            Alert.alert('Permission to access microphone was denied');
+        }
+
+        setAudioModeAsync({
+            playsInSilentMode: true,
+            allowsRecording: true,
+        });
+    }
+
+    useEffect(() => {
+        verificarPermissao();
+    }, []);
+
+    return (
+        <View style={styles.container}>
+            <Button
+                title={recorderState.isRecording ? 'Stop Recording' : 'Start Recording'}
+                onPress={recorderState.isRecording ? stopRecording : record}
+            />
+
+            {audioRecorder.uri && (
+                <View>
+                    <Button title="Play Sound" onPress={() => player.play()} />
+                    <Button
+                        title="Replay Sound"
+                        onPress={() => {
+                            player.seekTo(0);
+                            player.play();
+                        }}
+                    />
+                </View>
+            )}
+        </View>
+    );
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        backgroundColor: '#ecf0f1',
+        padding: 10,
+    },
+});

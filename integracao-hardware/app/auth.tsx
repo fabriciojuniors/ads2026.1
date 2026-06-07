@@ -31,6 +31,7 @@ export default function Auth() {
             promptMessage: 'Autentique-se para continuar', // Mensagem principal (iOS/Android)
             cancelLabel: 'Cancelar', // Botão de cancelar (Android)
             disableDeviceFallback: false, // Se a biometria falhar, permite usar a senha do celular (PIN/Padrão)
+            requireConfirmation: true
         });
 
         if (autenticacao.success) {

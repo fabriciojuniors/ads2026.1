@@ -11,6 +11,11 @@ export default function RootLayout() {
       }}
     >
       <Tabs.Screen
+        name="index"
+        options={{ href: null }}
+      />
+
+      <Tabs.Screen
         name="camera"
         options={{
           tabBarLabel: 'Câmera',
@@ -29,6 +34,33 @@ export default function RootLayout() {
           }}
         />
       </Tabs.Protected>
+
+      <Tabs.Screen
+        name="audio"
+        options={{
+          tabBarLabel: 'Áudio',
+          headerTitle: 'Gravador de Áudio',
+          tabBarIcon: ({ color, size }) => <Ionicons name="mic-outline" size={size} color={color} />
+        }}
+      />
+
+      <Tabs.Screen
+        name="sensors"
+        options={{
+          tabBarLabel: 'Sensores',
+          headerTitle: 'Sensores de Movimento',
+          tabBarIcon: ({ color, size }) => <Ionicons name="fitness-outline" size={size} color={color} />
+        }}
+      />
+
+      <Tabs.Screen
+        name="auth"
+        options={{
+          tabBarLabel: 'Autenticação',
+          headerTitle: 'Autenticação Biométrica',
+          tabBarIcon: ({ color, size }) => <Ionicons name="finger-print-outline" size={size} color={color} />
+        }}
+      />
 
     </Tabs>
   )
