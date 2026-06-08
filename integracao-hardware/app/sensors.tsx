@@ -2,10 +2,10 @@ import { Accelerometer, Gyroscope } from 'expo-sensors';
 import { useEffect, useRef, useState } from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';
 
-const SHAKE_THRESHOLD = 1.8;
-const SHAKE_COOLDOWN_MS = 1000;
+const LIMITE = 1.8;
+const INTERVALO_MINIMO_MS = 1000;
 
-type Vec3 = { x: number; y: number; z: number };
+type Eixos = { x: number; y: number; z: number };
 
 const EXERCISES = [
     '10 Flexões',
@@ -16,8 +16,8 @@ const EXERCISES = [
 ];
 
 export default function Sensors() {
-    const [accel, setAccel] = useState<Vec3>({ x: 0, y: 0, z: 0 });
-    const [gyro, setGyro] = useState<Vec3>({ x: 0, y: 0, z: 0 });
+    const [accel, setAccel] = useState<Eixos>({ x: 0, y: 0, z: 0 });
+    const [gyro, setGyro] = useState<Eixos>({ x: 0, y: 0, z: 0 });
     const [shakeCount, setShakeCount] = useState(0);
     const [lastShakeAt, setLastShakeAt] = useState(0);
 
@@ -33,7 +33,7 @@ export default function Sensors() {
             const magnitude = Math.sqrt(data.x ** 2 + data.y ** 2 + data.z ** 2);
             const now = Date.now();
 
-            if (magnitude > SHAKE_THRESHOLD && now - lastShakeAt > SHAKE_COOLDOWN_MS) {
+            if (magnitude > LIMITE && now - lastShakeAt > INTERVALO_MINIMO_MS) {
                 shakeCountRef.current += 1;
                 setShakeCount(shakeCountRef.current);
                 setLastShakeAt(now);
